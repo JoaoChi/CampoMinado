@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import params from './src/params';
-import Field from './src/components/Field';
-import mineField from './src/components/mineField';
 import { createdMinedBoard } from './src/functions';
+import MineField from './src/components/MineField'
 
 export default class App extends Component {
-
   constructor(props){
     super(props)
     this.state =  this.createState()
+    
   }
 
   minesAmount = () => {
@@ -22,7 +21,7 @@ export default class App extends Component {
     const cols = params.getColumnsAmount()
     const rows = params.getRowsAmount()
     return {
-      board: createdMinedBoard(rows, cols, this.minesAmount),
+      board: createdMinedBoard(rows, cols, this.minesAmount) || [],
     }
   }
 
@@ -34,18 +33,9 @@ export default class App extends Component {
         <Text style={styles.introductions}>Tamanho da grade:
           {params.getRowsAmount()}x{params.getColumnsAmount()}
         </Text>
-        <Field />
-        <Field opened />
-        <Field opened nearMines={1} />
-        <Field opened nearMines={2} />
-        <Field opened nearMines={4} />
-        <Field opened nearMines={7} />
-        <Field opened nearMines={3} />
-        <Field mined />
-        <Field mined opened />
-        <Field mined opened exploded />
-        <Field flagged opened />
-        <Field flagged />
+        <View style={styles.board}>
+          <MineField board={this.state.board}/>
+        </View>
       </View>
     );
   }
@@ -53,22 +43,14 @@ export default class App extends Component {
 
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    justifyContent: 'flex-end',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
+  board: {
+    alignItems: 'center',
+    backgroundColor: '#AAA'
+  }
 });
 
 
