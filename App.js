@@ -1,16 +1,20 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Alert } from 'react-native';
 import params from './src/params';
-import { createdMinedBoard, 
-  cloneBoard, 
-  openField, 
-  hasExplosion, 
-  wonGame, 
-  showMines, 
-  invertFlag, 
-  flagsUsed } from './src/functions';
+import {
+  createdMinedBoard,
+  cloneBoard,
+  openField,
+  hasExplosion,
+  wonGame,
+  showMines,
+  invertFlag,
+  flagsUsed
+} from './src/functions';
 import MineField from './src/components/MineField'
 import Header from './src/components/Header';
+import LevelSelection from './src/screens/LevelSelection';
+
 
 export default class App extends Component {
   constructor(props) {
@@ -32,6 +36,7 @@ export default class App extends Component {
       board: createdMinedBoard(rows, cols, this.minesAmount()) || [],
       won: false,
       lost: false,
+      showLevelSelection: false,
     }
   }
 
@@ -65,15 +70,24 @@ export default class App extends Component {
     this.setState({ board, won })
   }
 
+  onLevelSelected = level => {
+    params.difficultLevel = level
+    this.setState(this.createState)
+  }
+
   render() {
     return (
       <View style={styles.container}>
+        <LevelSelection isVisible={this.state.showLevelSelection}
+          onLevelSelected={this.onLevelSelected}
+          onCancel={() => this.setState({ showLevelSelection: false })}/>
         <Header flagsLeft={this.minesAmount() - flagsUsed(this.state.board)}
-        onNewGame={() => this.setState(this.createState())} />
+          onNewGame={() => this.setState(this.createState())} 
+          onFlagPress={() => this.setState({ showLevelSelection: true })}/>
         <View style={styles.board}>
           <MineField board={this.state.board}
-            onOpenField={this.onOpenField} 
-            onSelectField={this.onSelectField}/>
+            onOpenField={this.onOpenField}
+            onSelectField={this.onSelectField} />
         </View>
       </View>
     );
