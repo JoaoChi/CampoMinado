@@ -105,5 +105,6 @@ export {
     hasExplosion,
     wonGame,
     showMines,
-    invertFlag
+    invertFlag,
+    flagsUsed
 }
